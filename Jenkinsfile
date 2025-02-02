@@ -56,11 +56,6 @@ pipeline{
     stage("Build & Push Docker Image") {
             steps {
                 script {
-                  sh '''
-                    sudo usermod -aG docker ubuntu
-                    newgrp docker
-                    echo "Groups after re-login: $(groups)"
-                    '''
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image = docker.build "${IMAGE_NAME}"
                     }
