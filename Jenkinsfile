@@ -5,13 +5,6 @@ pipeline{
     maven 'Maven3'
   }
   stages{
-    
-    stage("Cleanup Workspace"){
-      steps{
-        CleanWs()
-      }
-    }
-
     stage("Checkout from SCM"){
       steps{
         git branch: 'main', credentialsId: 'Github', url: 'https://github.com/Assiar1/register-app'
