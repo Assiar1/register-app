@@ -56,11 +56,10 @@ pipeline{
     stage("Build & Push Docker Image") {
             steps {
                 script {
-                  sh 'whoami'
-                  sh 'groups'
                   sh '''
-                        echo "Machine IP Address:"
-                        hostname -I
+                    sudo usermod -aG docker ubuntu
+                    newgrp docker
+                    echo "Groups after re-login: $(groups)"
                     '''
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image = docker.build "${IMAGE_NAME}"
@@ -73,6 +72,25 @@ pipeline{
                 }
             }
 
+       }
+
+
+
+    stage("Trivy Scan") {
+           steps {
+               script {
+	            sh ('docker run -v /var/run/docker.sock:/var/run/docker.sock aquasec/trivy image assiar1/register-app-pipeline:latest --no-progress --scanners vuln  --exit-code 0 --severity HIGH,CRITICAL --format table')
+               }
+           }
+       }
+
+       stage ('Cleanup Artifacts') {
+           steps {
+               script {
+                    sh "docker rmi ${IMAGE_NAME}:${IMAGE_TAG}"
+                    sh "docker rmi ${IMAGE_NAME}:latest"
+               }
+          }
        }
 
                                           
