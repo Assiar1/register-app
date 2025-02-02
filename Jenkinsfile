@@ -56,19 +56,7 @@ pipeline{
     stage("Build & Push Docker Image") {
     steps {
         script {
-            // Log in to Docker registry and build the image
-            docker.withRegistry('https://registry.hub.docker.com', DOCKER_PASS) {
-                // Build the Docker image
-                docker_image = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-            }
-
-            // Log in to Docker registry again and push the image
-            docker.withRegistry('https://registry.hub.docker.com', DOCKER_PASS) {
-                // Push the Docker image with the specific tag
-                docker_image.push("${IMAGE_TAG}")
-                // Optionally, push the image with the 'latest' tag
-                docker_image.push('latest')
-            }
+            sh 'docker ps'
         }
     }
 }
