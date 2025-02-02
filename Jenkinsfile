@@ -58,6 +58,10 @@ pipeline{
                 script {
                   sh 'whoami'
                   sh 'groups'
+                  sh '''
+                        echo "Machine IP Address:"
+                        hostname -I
+                    '''
                     docker.withRegistry('',DOCKER_PASS) {
                         docker_image = docker.build "${IMAGE_NAME}"
                     }
