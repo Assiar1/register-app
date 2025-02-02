@@ -56,7 +56,8 @@ pipeline{
     stage("Build & Push Docker Image") {
     steps {
         script {
-            sh 'docker ps'
+            sh 'whoami'
+            sh 'groups'
         }
     }
 }
